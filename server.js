@@ -4,24 +4,29 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 const mongoose = require('mongoose');
 const path = require('path');
+const monsterController = require('./controllers/monsters')
 
 const MONGODB_URI = process.env.MONGODB_URI
 const db = mongoose.connection;
 
 mongoose.connect(MONGODB_URI, {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
+	useUnifiedTopology: true,
+	useFindAndModify: false
 });
+
 db.on('open', () => {
     console.log('Mongo is Connected');
 });
+
 /* Middleware */
 app.use(express.json());
 if (process.env.NODE_ENV !== 'development'){
-  app.use(express.static('public'))
+	app.use(express.static('public'))
 }
 
-/* Controller Goes Here Remove the tes*/
+/* Controller Goes Here Remove the test*/
+app.use('/api/monsters', monsterController)
 app.get('/test', (req, res)=>{
 	res.status(200).json({
 		website: 'My Website',
