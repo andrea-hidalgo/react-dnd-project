@@ -1,7 +1,7 @@
 const Monster = require('../models/monster')
-const express = require('express')
+const express = require('express');
+const monster = require('../models/monster');
 const monsterController = express.Router();
-
 
 //CRUD
 
@@ -33,5 +33,34 @@ monsterController.get('/', async (req,res) => {
             .json(error)
     }
 })
+
+//Destroy
+monsterController.delete('/:id', async (req,res) => {
+    try {
+        const foundMonster = await Monster.findByIdAndDelete(req.params.id)
+        res
+            .status(200)
+            .json(foundMonster)
+    } catch(error) {
+        res
+            .status(400)
+            .json(error)
+    }
+})
+
+//Update 
+monsterController.put('/:id', async (req, res) => {
+    try {
+        const foundMonster = await Monster.findByIdAndUpdate(req.params.id, req.body, { new:true })
+        res
+            .status(200)
+            .json(foundMonster)
+    } catch(error) {
+        res
+            .status(400)
+            .json(error)
+    }
+})
+
 
 module.exports = monsterController;
