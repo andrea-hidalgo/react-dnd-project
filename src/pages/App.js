@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import MonsterList from '../components/MonsterList';
 import MonsterInfo from '../components/MonsterInfo';
+import Collection from '../components/Collection';
 
 export default function App(props) {
 	const [challengeQuery, updateChallengeQuery] = useState({
@@ -10,6 +11,21 @@ export default function App(props) {
 	});
 
 	const [monsterData, setMonsterData] = useState([]);
+
+	const [collection, setCollection] = useState([]);
+
+	useEffect(() => {
+		(async () => {
+			try {
+				const response = await fetch('/api/monsters');
+				const data = await response.json();
+				await setCollection(data);
+				console.log(data);
+			} catch (error) {
+				console.error(error);
+			}
+		})();
+	}, []);
 
 	useEffect(() => {
 		(async () => {
@@ -68,7 +84,16 @@ export default function App(props) {
 				<input type="submit" value="Find Monsters" />
 			</form>
 			{Object.keys(monsterData).length ? (
-				<MonsterList monsterData={monsterData} />
+				<MonsterList
+					monsterData={monsterData}
+					setCollection={setCollection}
+					collection={collection}
+				/>
+			) : (
+				''
+			)}
+			{Object.keys(collection).length ? (
+				<Collection collection={collection} setCollection={setCollection} />
 			) : (
 				''
 			)}
