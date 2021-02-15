@@ -14,6 +14,34 @@ export default function App(props) {
 
 	const [collection, setCollection] = useState([]);
 
+	const [moreInfoQuery, setMoreInfoQuery] = useState({
+		baseURL: 'https://www.dnd5eapi.co',
+		searchURL: ''
+	});
+
+	const [moreMonsterInfo, setMoreMonsterInfo] = useState([]);
+
+	const dropdown = useRef(null);
+
+	useEffect(() => {
+		(async () => {
+			if (moreInfoQuery.searchURL) {
+				try {
+					const response = await fetch(moreInfoQuery.searchURL);
+					const data = await response.json();
+					await setMoreMonsterInfo(data);
+				} catch (error) {
+					console.error(error);
+				} finally {
+					setMoreInfoQuery({
+						baseURL: 'https://www.dnd5eapi.co',
+						searchURL: ''
+					});
+				}
+			}
+		})();
+	}, [moreInfoQuery]);
+
 	useEffect(() => {
 		(async () => {
 			try {
@@ -59,6 +87,9 @@ export default function App(props) {
 
 	const handleSubmit = event => {
 		event.preventDefault();
+		// const challengeIndex = dropdown.current.options.selectedIndex;
+		// const rating = dropdown.current.options[challengeIndex];
+		// console.log(dropdown);
 		updateChallengeQuery({
 			...challengeQuery,
 			searchURL: challengeQuery.baseURL + challengeQuery.challengeRating
@@ -66,37 +97,70 @@ export default function App(props) {
 		console.log(challengeQuery);
 	};
 
+	const moreInfo = async url => {
+		console.log(`https://www.dnd5eapi.co${url}`);
+		setMoreInfoQuery({
+			...moreInfoQuery,
+			searchURL: moreInfoQuery.baseURL + url
+		});
+	};
+
 	return (
 		<div className="AppPage">
-			<h1>D&amp;D 5e Monster Collector</h1>
-			<p>A handy DM Tool</p>
-			<p>
-				Look up a monster by its challenge rating, then add it to your list of
-				future encounters!
-			</p>
-			<form onSubmit={handleSubmit}>
-				<input
-					id="challengeRating"
-					type="text"
-					value={challengeQuery.challengeRating}
-					onChange={handleChange}
-				/>
-				<input type="submit" value="Find Monsters" />
-			</form>
-			{Object.keys(monsterData).length ? (
-				<MonsterList
-					monsterData={monsterData}
-					setCollection={setCollection}
-					collection={collection}
-				/>
-			) : (
-				''
-			)}
-			{Object.keys(collection).length ? (
-				<Collection collection={collection} setCollection={setCollection} />
-			) : (
-				''
-			)}
+			<div className="header">
+				<h1>D&amp;D 5e Monster Collector</h1>
+				<p>A handy DM Tool</p>
+				<p>
+					Look up a monster by its challenge rating, then add it to your list of
+					future encounters!
+				</p>
+			</div>
+			<div className="lists">
+				<div className="searchMonsters">
+					<h1>Monster Search</h1>
+					<form onSubmit={handleSubmit}>
+						<input
+							id="challengeRating"
+							type="text"
+							value={challengeQuery.challengeRating}
+							onChange={handleChange}
+						/>
+						<select name="rating" ref={dropdown}>
+							<option value="0">0</option>
+							<option value="0.125">1/8</option>
+							<option value="0.25">1/4</option>
+							<option value="0.5">1/2</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+						</select>
+						<input type="submit" value="Find Monsters" />
+					</form>
+					{Object.keys(monsterData).length ? (
+						<MonsterList
+							monsterData={monsterData}
+							setCollection={setCollection}
+							collection={collection}
+						/>
+					) : (
+						''
+					)}
+				</div>
+				{Object.keys(moreMonsterInfo).length ? (
+					<MonsterInfo moreMonsterInfo={moreMonsterInfo} />
+				) : (
+					''
+				)}
+				{Object.keys(collection).length ? (
+					<Collection
+						collection={collection}
+						setCollection={setCollection}
+						moreInfo={moreInfo}
+					/>
+				) : (
+					''
+				)}
+			</div>
 		</div>
 	);
 }
