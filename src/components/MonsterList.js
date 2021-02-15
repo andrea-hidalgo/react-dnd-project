@@ -28,7 +28,7 @@ export default function MonsterList(props) {
 	};
 
 	return (
-		<>
+		<div className="monsterList">
 			<h1>Monsters Retrieved!</h1>
 			{props.monsterData.map((monster, index) => {
 				return (
@@ -37,6 +37,6 @@ export default function MonsterList(props) {
 					</div>
 				);
 			})}
-		</>
+		</div>
 	);
 }

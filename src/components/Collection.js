@@ -24,20 +24,20 @@ export default function Collection(props) {
 		}
 	};
 
-	const submitNote = async e => {
-		e.preventDefault();
-		e.persist();
-		const noteValue = noteInput.current.value;
-		console.log(noteValue);
+	const submitNote = async monster => {
+		// e.preventDefault();
+		// e.persist();
+		const body = JSON.stringify({
+			notes: noteInput.current.value
+		});
+		console.log('notevalue is ' + noteInput);
 		try {
-			const response = await fetch(`/api/monsters/${e._id}`, {
+			const response = await fetch(`/api/monsters/${monster._id}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({
-					note: noteValue
-				})
+				body: body
 			});
 			const data = await response.json();
 			props.setCollection([...props.collection, data]);
@@ -47,17 +47,20 @@ export default function Collection(props) {
 	};
 
 	return (
-		<>
+		<div className="myCollection">
 			<h1>My Collection</h1>
 			{props.collection.map((monster, index) => {
 				return (
 					<div key={monster._id}>
 						<h3>{monster.name}</h3>
 						<p>{monster.notes}</p>
-						<form onSubmit={submitNote}>
+						<form onSubmit={() => submitNote(monster)}>
 							<input type="text" ref={noteInput}></input>
 							<input type="submit" value="Add Note" />
 						</form>
+						<button onClick={() => props.moreInfo(monster.url)}>
+							More Info
+						</button>
 						<button
 							onClick={() => {
 								monsterDelete(monster, index);
@@ -68,6 +71,6 @@ export default function Collection(props) {
 					</div>
 				);
 			})}
-		</>
+		</div>
 	);
 }
