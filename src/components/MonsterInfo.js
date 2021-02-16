@@ -16,6 +16,7 @@ export default function MonsterInfo(props) {
 				Hit Points: {m.hit_points} ({m.hit_dice})
 			</h5>
 			<h5>Speed: {m.speed.walk}</h5>
+			<div className="stats"></div>
 		</div>
 	);
 }

@@ -46,28 +46,45 @@ export default function Collection(props) {
 		}
 	};
 
+	const noteDropdown = id => {
+		const element = document.getElementById(id);
+		{
+			element.classList.contains('hide')
+				? element.classList.remove('hide')
+				: element.classList.add('hide');
+		}
+	};
+
 	return (
 		<div className="myCollection">
 			<h1>My Collection</h1>
 			{props.collection.map((monster, index) => {
 				return (
-					<div key={monster._id}>
-						<h3>{monster.name}</h3>
-						<p>{monster.notes}</p>
-						<form onSubmit={() => submitNote(monster)}>
-							<input type="text" ref={noteInput}></input>
-							<input type="submit" value="Add Note" />
-						</form>
-						<button onClick={() => props.moreInfo(monster.url)}>
-							More Info
-						</button>
-						<button
-							onClick={() => {
-								monsterDelete(monster, index);
-							}}
-						>
-							Delete
-						</button>
+					<div key={monster._id} className="monsterCollectionItem">
+						<div className="monsterNameSection">
+							<ion-icon
+								name="close-outline"
+								onClick={() => {
+									monsterDelete(monster, index);
+								}}
+							></ion-icon>
+							<h3>{monster.name}</h3>
+							<ion-icon
+								name="information-circle-outline"
+								onClick={() => props.moreInfo(monster.url)}
+							></ion-icon>
+							<ion-icon
+								name="create-outline"
+								onClick={() => noteDropdown(monster._id)}
+							></ion-icon>
+						</div>
+						{monster.notes ? <p>{monster.notes}</p> : ''}
+						<div className="monsterNotesSection hide" id={`${monster._id}`}>
+							<form onSubmit={() => submitNote(monster)}>
+								<input type="text" ref={noteInput}></input>
+								<input type="submit" value="Add Note" />
+							</form>
+						</div>
 					</div>
 				);
 			})}

@@ -125,7 +125,7 @@ export default function App(props) {
 							value={challengeQuery.challengeRating}
 							onChange={handleChange}
 						/>
-						<select name="rating" ref={dropdown}>
+						{/* <select name="rating" ref={dropdown}>
 							<option value="0">0</option>
 							<option value="0.125">1/8</option>
 							<option value="0.25">1/4</option>
@@ -133,7 +133,7 @@ export default function App(props) {
 							<option value="1">1</option>
 							<option value="2">2</option>
 							<option value="3">3</option>
-						</select>
+						</select> */}
 						<input type="submit" value="Find Monsters" />
 					</form>
 					{Object.keys(monsterData).length ? (
