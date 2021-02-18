@@ -29,11 +29,14 @@ export default function MonsterList(props) {
 
 	return (
 		<div className="monsterList">
-			<h1>Monsters Retrieved!</h1>
 			{props.monsterData.map((monster, index) => {
 				return (
-					<div key={monster.index} onClick={() => monsterAdd(monster, index)}>
+					<div key={monster.index} className="monsterNameSection">
 						<h3>{monster.name}</h3>
+						<ion-icon
+							name="add-circle-outline"
+							onClick={() => monsterAdd(monster, index)}
+						></ion-icon>
 					</div>
 				);
 			})}

@@ -12,27 +12,88 @@ h1,h2,h3,h4,h5,h6,p {
   padding:0;
 }
 
+h1 {
+  font-size: 2em;
+  font-family: 'Roboto';
+}
+
+input {
+  border-radius: 5px;
+  border: none;
+  padding:0.5em;
+}
+
+input[type="submit"] {
+  text-transform:uppercase;
+  font-weight:400;
+  box-shadow:inset 0 -0.6em 0 -0.35em rgba(0,0,0,0.17);
+  margin: 1em;
+  color: rgb(39, 38, 38);
+}
+
 body {
   font-size: 16px;
+}
+#app{
+  height:80vh;
+}
+
+.AppPage{
+  width: 100vw;
+  height: 100%;
+  background-color: rgb(238, 237, 237);
 }
 
 .header {
   text-align: center;
+  color: white;
+  height: 20vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-image: url(https://i.pinimg.com/originals/80/10/bf/8010bfe96c7f44ba407082b20819b339.jpg);
+  background-color: darkred;
+  background-position: center;
+  border-bottom: 5px solid black;
 }
 
 ion-icon {
-  height:26px;
-  width: 26px;
+  height:20px;
+  width: 20px;
+}
+.icon-group {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
 }
 
 .lists {
+  height: 100%;
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-between;
 }
 
+.monsterNameSection {
+  display:flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-content: center;    
+  align-items: center;
+  h3 {
+    font-size: 18px;
+  }
+}
+
 .myCollection {
-  margin: 0 5%;
+  width: 40%;
+  height: 100%;
+  padding: 2em;
+  border: 1px solid lightgray;
+  background-color: white;
+  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: auto;
   h1{
     text-align: center;
   }
@@ -44,26 +105,59 @@ ion-icon {
   .monsterCollectionItem {
     padding: 10px;
     margin: 10px 0;
-    border: 1px solid lightgray;
+    border: 1px solid rgb(224, 224, 222);
+    border-radius: 5px;
+    background-color: white;
     p {
       text-align: center;
     }
   }
 
-  .monsterNameSection {
-    display:flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-content: center;    
-  }
-
   .monsterNotesSection {
     text-align: center;
+  }
+
+  input[type="text"] {
+    box-shadow:inset 0 -0.6em 0 -0.35em rgba(0,0,0,0.17);
+    background-color: rgba(0,0,0,0.06);
+  }
+
+  input[type="submit"] {
+    background-color: #ededed;
+    font-size: 0.8em;
   }
 }
 
 .searchMonsters {
-  margin: 0 5%;
+  width: 60%;
+  padding: 2em;
+  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: rgb(238, 237, 237);
+  .monsterNameSection{
+    border: 1px solid lightgray;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    background-color: white;
+  }
+  input[type="text"] {
+    width: 30%;
+  }
+  input[type="submit"] {
+    background-color: white;
+  }
+}
+
+
+.stats-list{
+  display: flex;
+  text-align: center;
+
+  .stat {
+    margin: 0 5px;
+  }
 }
 
 .NavBar {
@@ -71,20 +165,4 @@ ion-icon {
   justify-content: space-around;
   width: 100%;
   background-color: #f0f0f0;
-}
-
-.HomePage {
-
-}
-
-.AboutPage {
-
-}
-
-.ContactPage{
-
-}
-
-.AppPage {
-
 }

@@ -1,7 +1,13 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function Collection(props) {
-	const noteInput = useRef(null);
+	const [noteValues, updateNoteValues] = useState(
+		props.collection.reduce((acc, item, index) => {
+			item.notes = item.notes ? item.notes : '';
+			acc[item._id] = item;
+			return acc;
+		}, {})
+	);
 
 	const monsterDelete = async (monster, index) => {
 		console.log('you clicked ' + monster.name + ' on index ' + index);
@@ -24,13 +30,18 @@ export default function Collection(props) {
 		}
 	};
 
-	const submitNote = async monster => {
-		// e.preventDefault();
-		// e.persist();
-		const body = JSON.stringify({
-			notes: noteInput.current.value
+	const handleChange = (e, monster) => {
+		updateNoteValues({
+			...noteValues,
+			...(noteValues[monster._id].notes = e.target.value)
 		});
-		console.log('notevalue is ' + noteInput);
+	};
+
+	const submitNote = async (e, monster, index) => {
+		e.preventDefault();
+		const body = JSON.stringify({
+			notes: noteValues[monster._id].notes
+		});
 		try {
 			const response = await fetch(`/api/monsters/${monster._id}`, {
 				method: 'PUT',
@@ -40,9 +51,16 @@ export default function Collection(props) {
 				body: body
 			});
 			const data = await response.json();
-			props.setCollection([...props.collection, data]);
+			const collectionCopy = [...props.collection];
+			collectionCopy.splice(index, 1, data);
+			props.setCollection([...collectionCopy]);
 		} catch (error) {
 			console.error(error);
+		} finally {
+			updateNoteValues({
+				...noteValues,
+				...(noteValues[monster._id].notes = '')
+			});
 		}
 	};
 
@@ -69,19 +87,27 @@ export default function Collection(props) {
 								}}
 							></ion-icon>
 							<h3>{monster.name}</h3>
-							<ion-icon
-								name="information-circle-outline"
-								onClick={() => props.moreInfo(monster.url)}
-							></ion-icon>
-							<ion-icon
-								name="create-outline"
-								onClick={() => noteDropdown(monster._id)}
-							></ion-icon>
+							<div className="icon-group">
+								<ion-icon
+									name="information-circle-outline"
+									onClick={() => props.moreInfo(monster.url)}
+								></ion-icon>
+								<ion-icon
+									name="create-outline"
+									onClick={() => noteDropdown(monster._id)}
+								></ion-icon>
+							</div>
 						</div>
 						{monster.notes ? <p>{monster.notes}</p> : ''}
+
 						<div className="monsterNotesSection hide" id={`${monster._id}`}>
-							<form onSubmit={() => submitNote(monster)}>
-								<input type="text" ref={noteInput}></input>
+							<form onSubmit={e => submitNote(e, monster, index)}>
+								<input
+									id="notes"
+									type="text"
+									value={noteValues[monster._id].notes}
+									onChange={e => handleChange(e, monster)}
+								></input>
 								<input type="submit" value="Add Note" />
 							</form>
 						</div>

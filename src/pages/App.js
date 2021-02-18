@@ -116,6 +116,15 @@ export default function App(props) {
 				</p>
 			</div>
 			<div className="lists">
+				{Object.keys(collection).length ? (
+					<Collection
+						collection={collection}
+						setCollection={setCollection}
+						moreInfo={moreInfo}
+					/>
+				) : (
+					''
+				)}
 				<div className="searchMonsters">
 					<h1>Monster Search</h1>
 					<form onSubmit={handleSubmit}>
@@ -148,15 +157,6 @@ export default function App(props) {
 				</div>
 				{Object.keys(moreMonsterInfo).length ? (
 					<MonsterInfo moreMonsterInfo={moreMonsterInfo} />
-				) : (
-					''
-				)}
-				{Object.keys(collection).length ? (
-					<Collection
-						collection={collection}
-						setCollection={setCollection}
-						moreInfo={moreInfo}
-					/>
 				) : (
 					''
 				)}

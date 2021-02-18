@@ -50,6 +50,7 @@ monsterController.delete('/:id', async (req,res) => {
 
 //Update 
 monsterController.put('/:id', async (req, res) => {
+    console.log(req.body)
     try {
         const foundMonster = await Monster.findByIdAndUpdate(req.params.id, req.body, { new:true })
         res
