@@ -33,10 +33,16 @@ export default function MonsterList(props) {
 				return (
 					<div key={monster.index} className="monsterNameSection">
 						<h3>{monster.name}</h3>
-						<ion-icon
-							name="add-circle-outline"
-							onClick={() => monsterAdd(monster, index)}
-						></ion-icon>
+						<div className="icon-group">
+							<ion-icon
+								name="information-circle-outline"
+								onClick={() => props.moreInfo(monster.url)}
+							></ion-icon>
+							<ion-icon
+								name="add-circle-outline"
+								onClick={() => monsterAdd(monster, index)}
+							></ion-icon>
+						</div>
 					</div>
 				);
 			})}

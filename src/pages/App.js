@@ -21,7 +21,12 @@ export default function App(props) {
 
 	const [moreMonsterInfo, setMoreMonsterInfo] = useState([]);
 
-	const dropdown = useRef(null);
+	const [infoHidden, toggleInfoHidden] = useState({ infoHidden: true });
+	const toggleHide = () => {
+		toggleInfoHidden({ infoHidden: !infoHidden.infoHidden });
+	};
+
+	// const dropdown = useRef(null);
 
 	useEffect(() => {
 		(async () => {
@@ -30,6 +35,7 @@ export default function App(props) {
 					const response = await fetch(moreInfoQuery.searchURL);
 					const data = await response.json();
 					await setMoreMonsterInfo(data);
+					toggleInfoHidden({ infoHidden: false });
 				} catch (error) {
 					console.error(error);
 				} finally {
@@ -108,12 +114,12 @@ export default function App(props) {
 	return (
 		<div className="AppPage">
 			<div className="header">
-				<h1>D&amp;D 5e Monster Collector</h1>
-				<p>A handy DM Tool</p>
-				<p>
+				<h1>Monster Collector</h1>
+				<p>A handy DM Tool for D&amp;D 5th Edition</p>
+				{/* <p>
 					Look up a monster by its challenge rating, then add it to your list of
 					future encounters!
-				</p>
+				</p> */}
 			</div>
 			<div className="lists">
 				{Object.keys(collection).length ? (
@@ -127,6 +133,7 @@ export default function App(props) {
 				)}
 				<div className="searchMonsters">
 					<h1>Monster Search</h1>
+					<p>Search by Challenge Rating (decimals or whole numbers!)</p>
 					<form onSubmit={handleSubmit}>
 						<input
 							id="challengeRating"
@@ -150,13 +157,17 @@ export default function App(props) {
 							monsterData={monsterData}
 							setCollection={setCollection}
 							collection={collection}
+							moreInfo={moreInfo}
 						/>
 					) : (
 						''
 					)}
 				</div>
-				{Object.keys(moreMonsterInfo).length ? (
-					<MonsterInfo moreMonsterInfo={moreMonsterInfo} />
+				{infoHidden.infoHidden === false ? (
+					<MonsterInfo
+						moreMonsterInfo={moreMonsterInfo}
+						toggleHide={toggleHide}
+					/>
 				) : (
 					''
 				)}

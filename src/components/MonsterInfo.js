@@ -5,6 +5,10 @@ export default function MonsterInfo(props) {
 
 	return (
 		<div className="monsterInfo">
+			<ion-icon
+				name="close-circle-outline"
+				onClick={props.toggleHide}
+			></ion-icon>
 			<h2>{m.name}</h2>
 			<h5>Challenge Rating: {m.challenge_rating}</h5>
 			<p>
