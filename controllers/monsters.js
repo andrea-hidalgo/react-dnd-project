@@ -1,6 +1,5 @@
 const Monster = require('../models/monster')
 const express = require('express');
-const monster = require('../models/monster');
 const monsterController = express.Router();
 
 //CRUD
