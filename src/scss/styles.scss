@@ -63,6 +63,11 @@ ion-icon {
   height:23px;
   width: 23px;
 }
+
+ion-icon:hover{
+  transform: translateY(-3px);
+}
+
 .icon-group {
   display: flex;
   flex-wrap: nowrap;
@@ -177,8 +182,6 @@ ion-icon {
   }
 }
 }
-
-
 
 .NavBar {
   display: flex;
