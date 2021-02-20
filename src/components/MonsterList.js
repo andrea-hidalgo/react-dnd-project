@@ -33,6 +33,7 @@ export default function MonsterList(props) {
 
 	return (
 		<div className="monsterList">
+			<h4>Challenge Rating {props.challengeRating}</h4>
 			{props.monsterData.map((monster, index) => {
 				return (
 					<div key={monster.index} className="monsterNameSection">

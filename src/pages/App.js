@@ -28,6 +28,7 @@ export default function App(props) {
 
 	const [noteValues, updateNoteValues] = useState({});
 
+	const [challengeRating, updateChallengeRating] = useState('');
 	// const dropdown = useRef(null);
 
 	useEffect(() => {
@@ -109,6 +110,7 @@ export default function App(props) {
 			...challengeQuery,
 			searchURL: challengeQuery.baseURL + challengeQuery.challengeRating
 		});
+		updateChallengeRating(challengeQuery.challengeRating);
 		console.log(challengeQuery);
 	};
 
@@ -171,6 +173,7 @@ export default function App(props) {
 							moreInfo={moreInfo}
 							updateNoteValues={updateNoteValues}
 							noteValues={noteValues}
+							challengeRating={challengeRating}
 						/>
 					) : (
 						''
