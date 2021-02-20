@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 export default function Collection(props) {
-	const [noteValues, updateNoteValues] = useState(
-		props.collection.reduce((acc, item, index) => {
-			item.notes = item.notes ? item.notes : '';
-			acc[item._id] = item;
-			return acc;
-		}, {})
-	);
-
 	const monsterDelete = async (monster, index) => {
 		console.log('you clicked ' + monster.name + ' on index ' + index);
 		const body = JSON.stringify({
@@ -24,6 +16,7 @@ export default function Collection(props) {
 					'Content-Type': 'application/json'
 				}
 			});
+			props.collection.splice(index, 1);
 			props.setCollection([...props.collection]);
 		} catch (error) {
 			console.error(error);
@@ -31,16 +24,16 @@ export default function Collection(props) {
 	};
 
 	const handleChange = (e, monster) => {
-		updateNoteValues({
-			...noteValues,
-			...(noteValues[monster._id].notes = e.target.value)
+		props.updateNoteValues({
+			...props.noteValues,
+			...(props.noteValues[monster._id].notes = e.target.value)
 		});
 	};
 
 	const submitNote = async (e, monster, index) => {
 		e.preventDefault();
 		const body = JSON.stringify({
-			notes: noteValues[monster._id].notes
+			notes: props.noteValues[monster._id].notes
 		});
 		try {
 			const response = await fetch(`/api/monsters/${monster._id}`, {
@@ -57,9 +50,9 @@ export default function Collection(props) {
 		} catch (error) {
 			console.error(error);
 		} finally {
-			updateNoteValues({
-				...noteValues,
-				...(noteValues[monster._id].notes = '')
+			props.updateNoteValues({
+				...props.noteValues,
+				...(props.noteValues[monster._id].notes = '')
 			});
 		}
 	};
@@ -76,44 +69,52 @@ export default function Collection(props) {
 	return (
 		<div className="myCollection">
 			<h1>My Collection</h1>
-			{props.collection.map((monster, index) => {
-				return (
-					<div key={monster._id} className="monsterCollectionItem">
-						<div className="monsterNameSection">
-							<ion-icon
-								name="close-outline"
-								onClick={() => {
-									monsterDelete(monster, index);
-								}}
-							></ion-icon>
-							<h3>{monster.name}</h3>
-							<div className="icon-group">
-								<ion-icon
-									name="information-circle-outline"
-									onClick={() => props.moreInfo(monster.url)}
-								></ion-icon>
-								<ion-icon
-									name="create-outline"
-									onClick={() => noteDropdown(monster._id)}
-								></ion-icon>
+			{Object.keys(props.noteValues).length
+				? props.collection.map((monster, index) => {
+						return (
+							<div key={monster._id} className="monsterCollectionItem">
+								<div className="monsterNameSection">
+									<ion-icon
+										name="close-outline"
+										onClick={() => {
+											monsterDelete(monster, index);
+										}}
+									></ion-icon>
+									<h3>{monster.name}</h3>
+									<div className="icon-group">
+										<ion-icon
+											name="information-circle-outline"
+											onClick={() => props.moreInfo(monster.url)}
+										></ion-icon>
+										<ion-icon
+											name="create-outline"
+											onClick={() => noteDropdown(monster._id)}
+										></ion-icon>
+									</div>
+								</div>
+								{monster.notes ? <p>{monster.notes}</p> : ''}
+								{props.noteValues[monster._id] ? (
+									<div
+										className="monsterNotesSection hide"
+										id={`${monster._id}`}
+									>
+										<form onSubmit={e => submitNote(e, monster, index)}>
+											<input
+												id="notes"
+												type="text"
+												value={props.noteValues[monster._id].notes}
+												onChange={e => handleChange(e, monster)}
+											></input>
+											<input type="submit" value="Add Note" />
+										</form>
+									</div>
+								) : (
+									''
+								)}
 							</div>
-						</div>
-						{monster.notes ? <p>{monster.notes}</p> : ''}
-
-						<div className="monsterNotesSection hide" id={`${monster._id}`}>
-							<form onSubmit={e => submitNote(e, monster, index)}>
-								<input
-									id="notes"
-									type="text"
-									value={noteValues[monster._id].notes}
-									onChange={e => handleChange(e, monster)}
-								></input>
-								<input type="submit" value="Add Note" />
-							</form>
-						</div>
-					</div>
-				);
-			})}
+						);
+				  })
+				: ''}
 		</div>
 	);
 }

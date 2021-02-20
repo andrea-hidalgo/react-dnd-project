@@ -10,7 +10,6 @@ export default function MonsterList(props) {
 			url: monster.url
 		});
 		console.log(body);
-
 		try {
 			const response = await fetch('/api/monsters', {
 				method: 'POST',
@@ -21,7 +20,12 @@ export default function MonsterList(props) {
 				body: body
 			});
 			const newMonster = await response.json();
-			props.setCollection([...props.collection, newMonster]);
+			const newCollection = [...props.collection, newMonster];
+			props.setCollection(newCollection);
+			props.updateNoteValues({
+				...props.noteValues,
+				[newMonster._id]: { ...newMonster, notes: '' }
+			});
 		} catch (error) {
 			console.error(error);
 		}

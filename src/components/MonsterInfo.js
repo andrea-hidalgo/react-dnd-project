@@ -47,10 +47,14 @@ export default function MonsterInfo(props) {
 					<p>{m.charisma}</p>
 				</div>
 			</div>
-			<p>
-				<b>Languages </b>
-				{m.languages}
-			</p>
+			{Object.keys(m.languages).length ? (
+				<p>
+					<b>Languages </b>
+					{m.languages}
+				</p>
+			) : (
+				''
+			)}
 		</div>
 	);
 }

@@ -26,6 +26,8 @@ export default function App(props) {
 		toggleInfoHidden({ infoHidden: !infoHidden.infoHidden });
 	};
 
+	const [noteValues, updateNoteValues] = useState({});
+
 	// const dropdown = useRef(null);
 
 	useEffect(() => {
@@ -54,6 +56,13 @@ export default function App(props) {
 				const response = await fetch('/api/monsters');
 				const data = await response.json();
 				await setCollection(data);
+				updateNoteValues(
+					data.reduce((acc, item, index) => {
+						item.notes = item.notes ? item.notes : '';
+						acc[item._id] = item;
+						return acc;
+					}, {})
+				);
 				console.log(data);
 			} catch (error) {
 				console.error(error);
@@ -122,11 +131,13 @@ export default function App(props) {
 				</p> */}
 			</div>
 			<div className="lists">
-				{Object.keys(collection).length ? (
+				{collection.length > 0 && Object.keys(noteValues).length ? (
 					<Collection
 						collection={collection}
 						setCollection={setCollection}
 						moreInfo={moreInfo}
+						noteValues={noteValues}
+						updateNoteValues={updateNoteValues}
 					/>
 				) : (
 					''
@@ -152,12 +163,14 @@ export default function App(props) {
 						</select> */}
 						<input type="submit" value="Find Monsters" />
 					</form>
-					{Object.keys(monsterData).length ? (
+					{monsterData.length && Object.keys(noteValues).length ? (
 						<MonsterList
 							monsterData={monsterData}
 							setCollection={setCollection}
 							collection={collection}
 							moreInfo={moreInfo}
+							updateNoteValues={updateNoteValues}
+							noteValues={noteValues}
 						/>
 					) : (
 						''
