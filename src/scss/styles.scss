@@ -31,6 +31,11 @@ input[type="submit"] {
   color: rgb(39, 38, 38);
 }
 
+input[type="submit"]:hover{
+  background-color: darkred !important;
+  color: white;
+}
+
 body {
   font-size: 16px;
 }
@@ -172,6 +177,11 @@ ion-icon:hover{
   margin: auto;
   padding: 5%;
   background-color: white;
+
+  ion-icon{
+    position: absolute;
+    right: 40%;
+  }
 
 .stats-list{
   display: flex;
